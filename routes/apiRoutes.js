@@ -68,6 +68,21 @@ router.get('/canidae/:gbif', async (req, res) => {
   }
 });
 
+router.get('/canidae/:parent_taxon', async (req, res) => {
+  try {
+    console.log(`* Using router.get('/canidae/:parent_taxon') to query (USER INPUT): ${req.params.parent_taxon}\n`);
+    const canidae = await db.sequelizeDB.models.canidae.findAll({
+      where: {
+        gbif: req.params.parent_taxon
+      }
+    });
+    res.json(canidae);
+  } catch (err) {
+    console.error(err);
+    res.error('Server error');
+  }
+});
+
 router.get('/felinae', async (req, res) => {
   try {
     console.log("Using router.get('/felinae')...");
@@ -225,6 +240,20 @@ router.delete('/hominidae', async (req, res) => {
   try {
     console.log('Deleting hominidae animal');
     const user = await sequelizeDB.models.hominidae.findAll({
+      where: {
+        item: 'random_items'
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.error('Server error');
+  }
+});
+
+router.delete('/queries', async (req, res) => {
+  try {
+    console.log('Deleting queries');
+    const user = await sequelizeDB.models.queries.findAll({
       where: {
         item: 'random_items'
       }
